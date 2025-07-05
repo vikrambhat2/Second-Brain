@@ -216,14 +216,15 @@ with store_tab:
     st.header("Store in Brain")
 
     # -- CATEGORY CHECKBOXES (Separate Session State) --
-    st.subheader("Select one category")
-    store_cols = st.columns(3)
-    store_selected_categories = []
+    with st.expander("Select a Category"):
+        st.subheader("Select one category")
+        store_cols = st.columns(3)
+        store_selected_categories = []
 
-    for idx, cat in enumerate(CATEGORIES):
-        key = f"store_cat_{cat}"
-        if store_cols[idx % 3].checkbox(cat, key=key):
-            store_selected_categories.append(cat)
+        for idx, cat in enumerate(CATEGORIES):
+            key = f"store_cat_{cat}"
+            if store_cols[idx % 3].checkbox(cat, key=key):
+                store_selected_categories.append(cat)
 
     # -- TEXT AND FILE INPUT --
     text_input = st.text_area("Paste or type your notes here", height=200)
@@ -271,14 +272,15 @@ with query_tab:
         st.session_state["category_filters"] = {cat: False for cat in CATEGORIES}
 
     # Step 2: Render checkboxes with persisted state
-    cols = st.columns(3)
-    for idx, category in enumerate(CATEGORIES):
-        col = cols[idx % 3]
-        st.session_state["category_filters"][category] = col.checkbox(
-            category,
-            value=st.session_state["category_filters"][category],
-            key=f"filter_{category}"
-        )
+    with st.expander("Select a Category"):
+        cols = st.columns(3)
+        for idx, category in enumerate(CATEGORIES):
+            col = cols[idx % 3]
+            st.session_state["category_filters"][category] = col.checkbox(
+                category,
+                value=st.session_state["category_filters"][category],
+                key=f"filter_{category}"
+            )
 
     # Step 3: Build the selected categories list
     selected_categories = [
