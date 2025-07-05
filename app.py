@@ -168,18 +168,14 @@ def query_notes(question: str, selected_categories: Optional[list] = None, top_k
 
         today_str = datetime.datetime.utcnow().strftime("%Y-%m-%d")
         prompt = ChatPromptTemplate.from_messages([
-            SystemMessage(content=(
-                f"Today is {today_str}.\n\n"
-                "You are a memory assistant. You are only allowed to summarize the notes provided. "
-                "Do not make assumptions or add information not explicitly present. "
-                "If the question asks about 'today', only use notes that contain today's timestamp. "
-                "Respond clearly and concisely."
-                "Use the user's previously stored notes to accurately and clearly answer their question. "
-                "Point user to the right notes based on the question."
-                "Notes are related to  one of the following topics Work, Personal, Health, Finance, Learning, Ideas, Travel, Shopping, Relationships, Tech Notes, TO-DO, Others."   
-                "Summarize and synthesize relevant information from the notes provided. "
-                "If the notes do not contain enough information, respond honestly with 'Not enough information in memory to answer.'"
-            )),
+                SystemMessage(content=(
+                    f"Today is {today_str}.\n\n"
+                    "You are a memory assistant. Only answer based on the notes provided — do not use assumptions or external knowledge. "
+                    "Topics may include: Work Projects, Career & Goals, Personal Life, Health & Fitness, Finances, Learning & Courses, Ideas & Inspiration, "
+                    "Travel Plans, Shopping Lists, Tech Notes, Daily Tasks, and Random Thoughts.\n\n"
+                    "Be clear and concise. "
+                    "If there's not enough information to answer, reply: 'Not enough information in memory to answer.'"
+                )),
             HumanMessage(content=(
                 f"User asked: {question}\n\n"
                 f"Relevant notes:\n{context}\n\n"
@@ -303,7 +299,7 @@ with query_tab:
                 st.error(f"Query error: {str(e)}")
 
     # Chat-style display
-    for q, a in st.session_state.chat_history:
+    for q, a in reversed(st.session_state.chat_history):
         with st.chat_message("user"):
             st.markdown(q)
         with st.chat_message("assistant"):
