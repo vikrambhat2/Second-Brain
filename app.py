@@ -231,7 +231,9 @@ with store_tab:
 
     # -- TEXT AND FILE INPUT --
     text_input = st.text_area("Paste or type your notes here", height=200)
-    uploaded_file = st.file_uploader("Upload a file (optional)", type=["pdf", "docx", "txt", "html"])
+
+    with st.expander("Or Upload a file"):
+        uploaded_file = st.file_uploader("Upload a file (optional)", type=["pdf", "docx", "txt", "html"])
 
     if st.button("Store Memory"):
         with st.spinner("Processing..."):
