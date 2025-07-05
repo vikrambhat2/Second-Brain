@@ -26,18 +26,18 @@ logger = logging.getLogger(__name__)
 
 # Predefined categories
 CATEGORIES = [
-    "Work",
-    "Personal",
-    "Health",
-    "Finance",
-    "Learning",
-    "Ideas",
-    "Travel",
-    "Shopping",
-    "Relationships",
+    "Work Projects",
+    "Career & Goals",
+    "Personal Life",
+    "Health & Fitness",
+    "Finances",
+    "Learning & Courses",
+    "Ideas & Inspiration",
+    "Travel Plans",
+    "Shopping Lists",
     "Tech Notes",
-    "TO-DO",
-    "Others"
+    "Daily Tasks",
+    "Random Thoughts"
 ]
 
 # Load environment variables
@@ -166,8 +166,10 @@ def query_notes(question: str, selected_categories: Optional[list] = None, top_k
             for r in results
         ])
 
+        today_str = datetime.datetime.utcnow().strftime("%Y-%m-%d")
         prompt = ChatPromptTemplate.from_messages([
             SystemMessage(content=(
+                f"Today is {today_str}.\n\n"
                 "You are a memory assistant. You are only allowed to summarize the notes provided. "
                 "Do not make assumptions or add information not explicitly present. "
                 "If the question asks about 'today', only use notes that contain today's timestamp. "
@@ -195,6 +197,18 @@ def query_notes(question: str, selected_categories: Optional[list] = None, top_k
         return {"answer": f"Error while querying notes: {str(e)}", "results": []}
 
 # Streamlit UI
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+
+if not st.session_state["authenticated"]:
+    password = st.text_input("Enter password to access the app", type="password")
+    if password == "vikrambhat":
+        st.session_state["authenticated"] = True
+        st.rerun()
+    elif password:
+        st.error("Incorrect password")
+    st.stop()
+
 st.set_page_config(page_title="Second Brain", layout="wide")
 st.title("\U0001F9E0 Second Brain")
 if "chat_history" not in st.session_state:
@@ -293,5 +307,4 @@ with query_tab:
         with st.chat_message("assistant"):
             st.markdown(a)
 
-if __name__ == "__main__":
-    init_qdrant()
+init_qdrant()
