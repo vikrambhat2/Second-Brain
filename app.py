@@ -26,16 +26,16 @@ logger = logging.getLogger(__name__)
 
 # Predefined categories
 CATEGORIES = [
-    "Work Projects",
-    "Career & Goals",
+    "Journal",
     "Personal Life",
+    "Family",
     "Health & Fitness",
     "Finances",
-    "Learning & Courses",
+    "Work Projects",
+    "Career & Goals",
     "Ideas & Inspiration",
     "Travel Plans",
     "Shopping Lists",
-    "Tech Notes",
     "Daily Tasks",
     "Random Thoughts"
 ]
