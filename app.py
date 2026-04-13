@@ -329,13 +329,13 @@ def query_notes(question: str, selected_categories: Optional[list] = None, top_k
                     for cat in selected_categories
                 ]
             )
-        results = qdrant_client.search(
+        results = qdrant_client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
+            query=query_vector,
             limit=top_k,
             with_payload=True,
             query_filter=filters
-        )
+        ).points
         if not results:
             return {"answer": "No relevant information found.", "results": []}
 
